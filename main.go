@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"github.com/username/mentoring_study_case/auth"
+	"github.com/username/mentoring_study_case/books"
 	"github.com/username/mentoring_study_case/db"
 	"log"
 )
@@ -22,9 +23,13 @@ func main() {
 	}
 	app.Use(cors.New())
 	app.Group("/api")
+	//v1
 	app.Group("/v1")
-
 	authHandler := auth.InitializeAuthHandler(con)
 	app.Post("/login", authHandler.Login)
 	app.Post("/register", authHandler.Register)
+
+	bookHandler := books.InitializeBookHandler(con)
+	app.Get("/books", bookHandler.GetAvailableBooks)
+	app.Post("/books/request", bookHandler.CreateBook)
 }
