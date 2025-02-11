@@ -7,6 +7,7 @@ import (
 	"github.com/username/mentoring_study_case/auth"
 	"github.com/username/mentoring_study_case/books"
 	"github.com/username/mentoring_study_case/db"
+	"github.com/username/mentoring_study_case/middleware"
 	"log"
 )
 
@@ -29,6 +30,7 @@ func main() {
 	app.Post("/login", authHandler.Login)
 	app.Post("/register", authHandler.Register)
 
+	app.Use(middleware.JWTAuthMiddleware())
 	bookHandler := books.InitializeBookHandler(con)
 	app.Get("/books", bookHandler.GetAvailableBooks)
 	app.Post("/books/request", bookHandler.CreateBook)
